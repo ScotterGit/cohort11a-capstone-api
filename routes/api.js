@@ -30,11 +30,11 @@ router.post('/categories/:categoryId/questions', async function(req, res, next) 
 
 //this will fetch questions for a particular category based on the id: GET http://localhost:3000/api/v1/categories/1/questions
 router.get('/categories/:categoryId/questions', async function(req, res, next) {
-    let questions = await Question.findAll({where: {categoryId: req.params.categoryId}});
+    let questions = await Question.findAll({where: {categoryId: req.params.categoryId}, include: [{model: Answer}]});
     res.json(questions);
 });
 
-//create an answer for a question: http://localhost:3000/api/v1/categories/1/answers
+//create an answer for a question: http://localhost:3000/api/v1/categories/1/questions/1/answers
 router.post('/categories/:categoryId/questions/:questionId/answers', async function(req, res, next) {
     let body = req.body;
     body.questionId = req.params.questionId;
@@ -42,7 +42,7 @@ router.post('/categories/:categoryId/questions/:questionId/answers', async funct
     res.json(answer);
 });
 
-//fetch/list out answers for question: GET http://localhost:3000/api/v1/categories/1/answers
+//fetch/list out answers for question: GET http://localhost:3000/api/v1/categories/1/questions/1/answers
 router.get('/categories/:categoryId/questions/:questionId/answers', async function(req, res, next) {
     let answers = await Answer.findAll({where: {questionId: req.params.questionId}});
     res.json(answers)
